@@ -1,0 +1,24 @@
+# Starting compiling UnityEngine.TestRunner.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-c96e3d1ff2b1c4c47b1597b4acc6df81
+# Starting compiling UnityEngine.UI.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-f8981daaf7f0179429337c1a98fc2931
+# Starting compiling UnityEditor.TestRunner.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-ad704853627eb8d4b90b4a25ac88b9cf
+# Starting compiling UnityEditor.UI.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-da2209878f10a1c468c7941fd1a0910b
+# Starting compiling Unity.VSCode.Editor.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-bdb686965243b004bb4bf5b9f58e4204
+# Starting compiling Unity.VisualStudio.Editor.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-ea477484d697d244fb1f6983551ab091
+# Starting compiling Unity.Timeline.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-be8e8b62ba4b89b48a247b1cb203a79b
+# Starting compiling Unity.TextMeshPro.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-93848b737cc11a6408f9d5fd4f698f42
+# Starting compiling Unity.Rider.Editor.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-38ca9c925fb68de4780b99cace66dd29
+# Starting compiling Unity.CollabProxy.Editor.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-520425ad40a2b134c895fa32a48788f8
+# Starting compiling Unity.Timeline.Editor.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-06f28c568f086a145ade365e93d485cf
+# Starting compiling Unity.TextMeshPro.Editor.dll
+D:\2020.3.1f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-1c9e73c4327de9b47b82f0e13e7a217b
