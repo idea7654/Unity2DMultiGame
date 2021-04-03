@@ -220,7 +220,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 853516d22b9538842ba9fe6e4a21ca93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2615490170542071122, guid: 8ae7168d87f0a8a47bccfa8f2c92fae4, type: 3}
 --- !u!114 &1273260468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,3 +232,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60bdefdff72ca4b4ebccb7feb40d75d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefab: {fileID: 2615490170542071122, guid: 8ae7168d87f0a8a47bccfa8f2c92fae4, type: 3}
+  players: []
+  players_forCheck: []

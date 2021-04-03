@@ -21,12 +21,25 @@ public class Manager_network : MonoBehaviour
     IPAddress ip;
     IPEndPoint endPoint;
 
-    struct Player
+    public GameObject prefab;
+
+    // public class WorldObject
+    // {
+    //     public int id;
+    //     public float x;
+    //     public float y;
+    //     private object remote;
+    // }
+    [Serializable]
+    public class Players
     {
-        public string message;
+        public int id;
         public float x;
         public float y;
+        private object remote;
     };
+    public Players[] players;
+    public Players[] players_forCheck;
 
     struct Message{
         public string message;
@@ -125,14 +138,67 @@ public class Manager_network : MonoBehaviour
         //Debug.Log(JsonUtility.FromJson<Player>(recv).x);
         // Debug.Log(GameObject.Find("Player").GetComponent<Movement>().player.x);
         GameObject playerPrefab = GameObject.Find("Player");
-        // playerPrefab.transform.position.x = JsonUtility.FromJson<Player>(recv).x;
-        // playerPrefab.transform.position.y = JsonUtility.FromJson<Player>(recv).y;
-        Debug.Log(playerPrefab.transform.position);
+        // Vector3 serverVec = new Vector3(JsonUtility.FromJson<Player>(recv).x, JsonUtility.FromJson<Player>(recv).y, 0);
+        // playerPrefab.transform.position = serverVec;
+        string jsonString= fixJson(recv);
+        players = JsonHelper.FromJson<Players>(jsonString);
+        if(object.ReferenceEquals(players, players_forCheck) == false){
+            players_forCheck = players;
+            for(int i = 0; i < players.Length; i++){
+                CreatePlayers(players[i].id, new Vector3(players[i].x, players[i].y, 0));
+            }
+        }
+        // Debug.Log(players[0].id);
+        // for(int i = 0; i < players.Length; i++){
+        //     //CreatePlayers(players[i].id, new Vector3(players[i].x, players[i].y, 0));
+        // }
+        //playerPrefab.transform.position.x = recv.
+    }
+
+    string fixJson(string value)
+    {
+        value = "{\"Items\":" + value + "}";
+        return value;
     }
 
     private void OnApplicationQuit()
     {
         ServerCheck_thread.Abort();
         sock.Close();
+    }
+
+    public static class JsonHelper
+    {
+        public static T[] FromJson<T>(string json)
+        {
+            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+            return wrapper.Items;
+        }
+
+        public static string ToJson<T>(T[] array)
+        {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.Items = array;
+            return JsonUtility.ToJson(wrapper);
+        }
+
+        public static string ToJson<T>(T[] array, bool prettyPrint)
+        {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.Items = array;
+            return JsonUtility.ToJson(wrapper, prettyPrint);
+        }
+
+        [Serializable]
+        private class Wrapper<T>
+        {
+            public T[] Items;
+        }
+    }
+
+    public void CreatePlayers(int id, Vector3 position){
+        var obj = Instantiate(prefab, position, Quaternion.identity);
+        obj.name = id.ToString();
+        //obj.Id = id;
     }
 }
