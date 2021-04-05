@@ -22,6 +22,7 @@ public class Manager_network : MonoBehaviour
     IPEndPoint endPoint;
 
     public GameObject prefab;
+    //public bool flag = true;
 
     // public class WorldObject
     // {
@@ -36,10 +37,15 @@ public class Manager_network : MonoBehaviour
         public int id;
         public float x;
         public float y;
-        private object remote;
+        //private object remote;
     };
     public Players[] players;
     public Players[] players_forCheck;
+    public class ClientPlayer : Players{
+        public int direction;
+    };
+
+    public ClientPlayer clientPlayer;
 
     struct Message{
         public string message;
@@ -105,7 +111,12 @@ public class Manager_network : MonoBehaviour
                 b = netBuffer.Dequeue();
             }
             // Debug.Log("server -> " + b); //버퍼를 사용
-            StringToObj(b);
+            int index = b.IndexOf("[");
+            if(index == -1){
+                StringToObj(b);
+            }else{
+                ArrToObj(b);
+            }
         }
     }
 
@@ -135,24 +146,45 @@ public class Manager_network : MonoBehaviour
     }
 
     private void StringToObj(string recv){
-        //Debug.Log(JsonUtility.FromJson<Player>(recv).x);
+        clientPlayer = JsonUtility.FromJson<ClientPlayer>(recv);
+        Debug.Log(clientPlayer.direction);
+    }
+
+    private void ArrToObj(string recv){
         // Debug.Log(GameObject.Find("Player").GetComponent<Movement>().player.x);
-        GameObject playerPrefab = GameObject.Find("Player");
-        // Vector3 serverVec = new Vector3(JsonUtility.FromJson<Player>(recv).x, JsonUtility.FromJson<Player>(recv).y, 0);
-        // playerPrefab.transform.position = serverVec;
+        
         string jsonString= fixJson(recv);
-        players = JsonHelper.FromJson<Players>(jsonString);
-        if(object.ReferenceEquals(players, players_forCheck) == false){
-            players_forCheck = players;
-            for(int i = 0; i < players.Length; i++){
-                CreatePlayers(players[i].id, new Vector3(players[i].x, players[i].y, 0));
+        players_forCheck = JsonHelper.FromJson<Players>(jsonString);
+        // if(flag){
+        //    players_forCheck = players;
+        //     for(int i = 0; i < players.Length; i++){
+        //         CreatePlayers(players[i].id, new Vector3(players[i].x, players[i].y, 0));
+        //     }
+        //     flag = false;
+        // }
+        if(players.Length != players_forCheck.Length){
+            if(players.Length == 0){
+                for(int i = 0; i < players_forCheck.Length; i++){
+                    CreatePlayers(players_forCheck[i].id, new Vector3(players_forCheck[i].x, players_forCheck[i].y, 0));
+                }
+            }else{
+                for(int i = 0; i < players_forCheck.Length; i++){
+                    if(players[i].id != players_forCheck[i].id){
+                        CreatePlayers(players_forCheck[i].id, new Vector3(players_forCheck[i].x, players_forCheck[i].y, 0));
+                    }
+                }
             }
         }
-        // Debug.Log(players[0].id);
-        // for(int i = 0; i < players.Length; i++){
-        //     //CreatePlayers(players[i].id, new Vector3(players[i].x, players[i].y, 0));
-        // }
-        //playerPrefab.transform.position.x = recv.
+        players = players_forCheck;
+        UpdateCharacterPos();
+    }
+
+    public void UpdateCharacterPos(){
+        GameObject playerPrefab = GameObject.Find("Player");
+        //추후 토큰값으로 유저 판별기능 넣어야 구별가능
+        Vector3 playerVector = new Vector3(players[0].x, players[0].y, 0);
+        //Debug.Log(playerVector);
+        // playerPrefab.transform.position = playerVector;
     }
 
     string fixJson(string value)
