@@ -37,6 +37,7 @@ public class Manager_network : MonoBehaviour
         public int id;
         public float x;
         public float y;
+        public double currentTime;
         //private object remote;
     };
     public Players[] players;
@@ -44,6 +45,8 @@ public class Manager_network : MonoBehaviour
     public class ClientPlayer : Players{
         public int direction;
     };
+
+    public double latency;
 
     public ClientPlayer clientPlayer;
 
@@ -59,7 +62,25 @@ public class Manager_network : MonoBehaviour
     }
     void Update()
     {
-        
+        if(clientPlayer != null){
+            GameObject playerPrefab = GameObject.Find("1");
+            if(clientPlayer.direction == 1){
+                //playerPrefab.transform.position += new Vector3(-1, 0, 0) * 5.0f * Time.deltaTime;
+                playerPrefab.transform.position += new Vector3(-1, 0, 0) * 5.0f * Time.deltaTime;
+            }
+            if(clientPlayer.direction == 2){
+                //playerPrefab.transform.position += new Vector3(-1, 0, 0) * 5.0f * Time.deltaTime;
+                playerPrefab.transform.position += new Vector3(1, 0, 0) * 5.0f * Time.deltaTime;
+            }
+            if(clientPlayer.direction == 3){
+                //playerPrefab.transform.position += new Vector3(-1, 0, 0) * 5.0f * Time.deltaTime;
+                playerPrefab.transform.position += new Vector3(0, 1, 0) * 5.0f * Time.deltaTime;
+            }
+            if(clientPlayer.direction == 4){
+                //playerPrefab.transform.position += new Vector3(-1, 0, 0) * 5.0f * Time.deltaTime;
+                playerPrefab.transform.position += new Vector3(0, -1, 0) * 5.0f * Time.deltaTime;
+            }
+        }
     }
 
     IEnumerator buffer_update()
@@ -147,7 +168,30 @@ public class Manager_network : MonoBehaviour
 
     private void StringToObj(string recv){
         clientPlayer = JsonUtility.FromJson<ClientPlayer>(recv);
-        Debug.Log(clientPlayer.direction);
+        //Debug.Log(clientPlayer.currentTime);
+        latency = DateTime.Now.TimeOfDay.TotalMilliseconds - clientPlayer.currentTime;
+        // Debug.Log(latency + "ms");
+        moveCharacter(clientPlayer.x, clientPlayer.y, clientPlayer.direction);
+        
+    }
+
+    private void moveCharacter(float x, float y, int direction){
+        GameObject playerPrefab = GameObject.Find("1");
+        if(direction == 0){
+            playerPrefab.transform.position = playerPrefab.transform.position;
+        }
+        if(direction == 1){
+            playerPrefab.transform.position = new Vector3(clientPlayer.x, clientPlayer.y, 0) + new Vector3(-1, 0, 0) * 5.0f * Convert.ToSingle(latency) / 1000.0f;
+        }
+        if(direction == 2){
+            playerPrefab.transform.position = new Vector3(clientPlayer.x, clientPlayer.y, 0) + new Vector3(1, 0, 0) * 5.0f * Convert.ToSingle(latency) / 1000.0f;
+        }
+        if(direction == 3){
+            playerPrefab.transform.position = new Vector3(clientPlayer.x, clientPlayer.y, 0) + new Vector3(0, 1, 0) * 5.0f * Convert.ToSingle(latency) / 1000.0f;
+        }
+        if(direction == 4){
+            playerPrefab.transform.position = new Vector3(clientPlayer.x, clientPlayer.y, 0) + new Vector3(0, -1, 0) * 5.0f * Convert.ToSingle(latency) / 1000.0f;
+        }
     }
 
     private void ArrToObj(string recv){
@@ -155,13 +199,6 @@ public class Manager_network : MonoBehaviour
         
         string jsonString= fixJson(recv);
         players_forCheck = JsonHelper.FromJson<Players>(jsonString);
-        // if(flag){
-        //    players_forCheck = players;
-        //     for(int i = 0; i < players.Length; i++){
-        //         CreatePlayers(players[i].id, new Vector3(players[i].x, players[i].y, 0));
-        //     }
-        //     flag = false;
-        // }
         if(players.Length != players_forCheck.Length){
             if(players.Length == 0){
                 for(int i = 0; i < players_forCheck.Length; i++){
@@ -176,6 +213,7 @@ public class Manager_network : MonoBehaviour
             }
         }
         players = players_forCheck;
+        //Debug.Log(players[0].currentTime);
         UpdateCharacterPos();
     }
 
